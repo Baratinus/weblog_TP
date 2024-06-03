@@ -7,15 +7,15 @@ $password ="";
 $password_confirmation="";
 //REGISTER part of the programm
 if (isset($_POST['register_btn'])) {
-    // $username = esc($_POST['username']);
-    // $password = esc($_POST['password']);
-     // $email =esc($_POST['email']);
-    // $password_confirmation =esc($_POST['password_confirmation']);
+    $username = esc($_POST['username']);
+    $password = esc($_POST['password']);
+    $email =esc($_POST['email']);
+    $password_confirmation =esc($_POST['password_confirmation']);
  
      if (empty($username)) {
          array_push($errors, "Username required");
      }
-     if (empty($email)) {
+     if (empty($Email)) {
          array_push($errors, "Email required");
      }
      if (empty($password)) {

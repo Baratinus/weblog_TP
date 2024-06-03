@@ -18,7 +18,7 @@
 				<?php include(ROOT_PATH . '/includes/public/errors.php') ?>
 				<input type="text" name="username" placeholder="Username">
                 
-                <input type="text" name="Email"placeholder="Email">
+                <input type="text" name="email"placeholder="Email">
 
 				<input type="password" name="password" value="" placeholder="Password">
 
@@ -33,8 +33,7 @@
 
 
 	</div>
-    <?php var_dump($errors); ?>
-	<!-- // content -->
+    <!-- // content -->
 
 	</div>
 	<!-- // container -->
