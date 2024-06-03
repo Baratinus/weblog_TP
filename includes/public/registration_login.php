@@ -12,32 +12,33 @@ if (isset($_POST['register_btn'])) {
     $email =esc($_POST['email']);
     $password_confirmation =esc($_POST['password_confirmation']);
  
-     if (empty($username)) {
+    if (empty($username)) {
          array_push($errors, "Username required");
-     }
-     if (empty($Email)) {
+    }
+    if (empty($email)) {
          array_push($errors, "Email required");
-     }
-     if (empty($password)) {
+    }
+    if (empty($password)) {
          array_push($errors, "Password required");
-     }
-     if (empty($password_confirmation)) {
+    }
+    if (empty($password_confirmation)) {
          array_push($errors, "Password confirmation required");
-     }
-     if($password!=$password_confirmation){
+    }
+    if($password!=$password_confirmation){
          array_push($errors, "the passwords do not match please try again");
-     }
-     /*if (empty($errors)) {
-         $password = md5($password); // encrypt password
-         $sql = //"SELECT * FROM users WHERE username='$username' and password='$password' LIMIT 1";
-         $result = mysqli_query($conn, $sql);
+    }
+    if (empty($errors)) {
+        $password = md5($password); // encrypt password
+        $sql = "INSERT INTO users (username, email, password, role) VALUES ('$username', '$email', '$password', 'Author');";//to do timestamp
+        $result = mysqli_query($conn, $sql);
+    }
+    if ($result ==true){
+        header('location: index.php');
+    }
+
+        
+}
  
-         if (mysqli_num_rows($result) > 0) {
-         
-         
-         }
-     }*/
- }
  
 
 // LOG USER IN
