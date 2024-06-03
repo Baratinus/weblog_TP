@@ -30,9 +30,11 @@
 				
 			<div class="post" style="margin-left: 0px;">
 				<img class="post_image" src="<?php echo 'static/images/' . $post["image"]; ?>" alt="">
+				<div><?php echo $post["topic"]; ?></div>
 				<div><?php echo $post["title"]; ?></div>
 				<div><?php echo $post["created_at"]; ?></div>
-				<div><a href="<?php echo 'coucou'; ?>">Read more...</a></div>
+				<div><a href="single_post.php?post-slug=<?php echo $post['slug']; ?>">Read more...</a></div>
+				
 			</div>
 
 			<?php } ?>
