@@ -28,8 +28,8 @@
 
 			<?php foreach (getPublishedPosts() as $post) { ?>
 				
-			<div>
-				<img src="<?php echo 'static/images/' . $post["image"]; ?>" alt="">
+			<div class="post" style="margin-left: 0px;">
+				<img class="post_image" src="<?php echo 'static/images/' . $post["image"]; ?>" alt="">
 				<div><?php echo $post["title"]; ?></div>
 				<div><?php echo $post["created_at"]; ?></div>
 				<div><a href="<?php echo 'coucou'; ?>">Read more...</a></div>
