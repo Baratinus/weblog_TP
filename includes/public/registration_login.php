@@ -3,6 +3,42 @@
 $username = "";
 $email = "";
 $errors = array();
+$password ="";
+$password_confirmation="";
+//REGISTER part of the programm
+if (isset($_POST['register_btn'])) {
+    // $username = esc($_POST['username']);
+    // $password = esc($_POST['password']);
+     // $email =esc($_POST['email']);
+    // $password_confirmation =esc($_POST['password_confirmation']);
+ 
+     if (empty($username)) {
+         array_push($errors, "Username required");
+     }
+     if (empty($email)) {
+         array_push($errors, "Email required");
+     }
+     if (empty($password)) {
+         array_push($errors, "Password required");
+     }
+     if (empty($password_confirmation)) {
+         array_push($errors, "Password confirmation required");
+     }
+     if($password!=$password_confirmation){
+         array_push($errors, "the passwords do not match please try again");
+     }
+     /*if (empty($errors)) {
+         $password = md5($password); // encrypt password
+         $sql = //"SELECT * FROM users WHERE username='$username' and password='$password' LIMIT 1";
+         $result = mysqli_query($conn, $sql);
+ 
+         if (mysqli_num_rows($result) > 0) {
+         
+         
+         }
+     }*/
+ }
+ 
 
 // LOG USER IN
 if (isset($_POST['login_btn'])) {
