@@ -35,6 +35,9 @@ if (isset($_POST['register_btn'])) {
     if ($result ==true){
         header('location: index.php');
     }
+    else{
+        array_push($errors, "failed to create user");
+    }
 
         
 }
