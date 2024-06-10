@@ -28,21 +28,29 @@ if (isset($_POST['register_btn'])) {
          array_push($errors, "the passwords do not match please try again");
     }
     if (empty($errors)) {
-        $password = md5($password); // encrypt password
-        $sql = "INSERT INTO users (username, email, password, role) VALUES ('$username', '$email', '$password', 'Author');";//to do timestamp
-        $result = mysqli_query($conn, $sql);
-    }
-    if ($result ==true){
-        header('location: index.php');
-    }
-    else{
-        array_push($errors, "failed to create user");
-    }
 
+        //test existe déja
+        $sql= "SELECT * FROM `users` WHERE username = '$username' AND email = '$email';";
+        $result = mysqli_query($conn, $sql);
+        if (mysqli_num_rows($result)>=1){
+            array_push($errors,"user already exists");
+        }
+        else{
+            //insert new user
+            $password = md5($password); // encrypt password
+            $sql = "INSERT INTO users (username, email, password, role) VALUES ('$username', '$email', '$password', 'Author');";//to do timestamp
+            $result = mysqli_query($conn, $sql);
         
+            if ($result ==true){
+                //$_SESSION
+                header('location: index.php');
+            }
+            else{
+                array_push($errors, "failed to create user");
+            }
+        }
+    }
 }
- 
- 
 
 // LOG USER IN
 if (isset($_POST['login_btn'])) {
