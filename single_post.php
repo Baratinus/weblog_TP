@@ -37,7 +37,7 @@
             </div>
             <div class="card-content">
                 <?php foreach (getAllTopics() as $topic) { ?>
-                <a href="filterd_posts.php?topic=<?php echo $topic['id'] ?>"><?php echo $topic['name']; ?></a>
+                <a href="filtered_posts.php?topic=<?php echo $topic['id'] ?>"><?php echo $topic['name']; ?></a>
                 <?php } ?>
             </div>
             

@@ -68,3 +68,31 @@ function getAllTopics()
     return $topics;
 
 }
+
+/**
+* This function returns the name and slug of a
+* category in an array
+*/
+function getPublishedPostsByTopic($topic_id) {
+
+    global $conn;
+    $sql = "SELECT * FROM `post_topic` AS PT INNER JOIN `posts` AS P ON PT.post_id = P.id WHERE PT.topic_id = $topic_id;";
+    
+    $result = mysqli_query($conn, $sql);
+
+    // fetch all posts as an associative array called $posts
+    $posts = mysqli_fetch_assoc($result);
+    $final_posts = array();
+
+
+    echo("coucou");
+
+    foreach ($posts as $post) {
+        $post['topic'] = getPostTopic($post['id']);
+        array_push($final_posts, $post);
+        var_dump($post);
+    }
+
+
+    return $final_posts;
+}
