@@ -1,6 +1,4 @@
-/*--------------------
-post_functions.php
-------------------------*/
+<?php
 // Post variables
 $post_id = 0;
 $isEditingPost = false;
@@ -19,7 +17,7 @@ function getAllPosts() {
     // fonction a besoin de la fonction getPostAuthorById
     // le code de getPostAuthorById est KDO
     //TO DO
-    return $posts ;
+    //return $posts ;
 }
 function createPost($request_values) {
     global $conn, $errors, $title, $featured_image, $topic_id, $body, $published;
@@ -27,7 +25,7 @@ function createPost($request_values) {
     // get the author/username of a post
 function getPostAuthorById($user_id){
     global $conn ;
-    $sql = « SELECT username FROM users WHERE id=$user_id » ;
+    $sql = "SELECT username FROM users WHERE id=$user_id";
     $result = mysqli_query($conn, $sql) ;
     if ($result) {
         // return username
@@ -63,4 +61,5 @@ function togglePublishPost($post_id, $message){
         exit(0);
     }
 }
+
 

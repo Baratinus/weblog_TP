@@ -1,17 +1,13 @@
 <?php include('../config.php'); ?>
-<?php include(ROOT_PATH . '/includes/post_functions.php'); ?>
+<?php include(ROOT_PATH . '/admin/post_functions.php'); ?>
 <?php include(ROOT_PATH . '/includes/admin/head_section.php'); ?>
-
+<?php include(ROOT_PATH . '/admin/create_post.php'); ?>
 <?php
-// Get all admin roles from DB : by admin roles i mean (Admin or Author)
-//$roles = getAdminRoles(); // table roles
-
-// Get all admin users from DB
-//$admins = getAdminUsers(); // by admin roles i mean (Admin or Author), table users
 $posts = getAllPosts();
+var_dump($errors);
 ?>
 
-<title>Admin | Manage posts</title>
+<title>Admin | Manage Posts</title>
 </head>
 
 <body>
@@ -28,7 +24,7 @@ $posts = getAllPosts();
 			<?php include(ROOT_PATH . '/includes/public/messages.php') ?>
 
 			<?php if (empty($posts)) : ?>
-				<h1>No admins in the database.</h1>
+				<h1>No Posts in the database.</h1>
 			<?php else : ?>
 				<table class="table">
 					<thead>
@@ -50,7 +46,7 @@ $posts = getAllPosts();
 								</td>
 								<td><?php echo $posts['Views']; ?></td>
                                 <td>
-                                    <a class="fa fa-checkmark btn check" href="posts.php?publish-posts=<?php echo $posts['id'] ?>"> 
+                                    <a class="fa fa-checkmark btn publish" href="posts.php?publish-posts=<?php echo $posts['id'] ?>"> 
                                     </a>
                                 </td>
 								<td>
