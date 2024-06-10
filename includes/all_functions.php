@@ -33,3 +33,38 @@ function getPostTopic($post_id){
 
     return NULL;
    }
+
+function getPost($slug)
+{
+    global $conn;
+
+    $sql = "SELECT * FROM `posts` WHERE `slug` = '$slug';";
+
+    $result = mysqli_query($conn, $sql);
+
+    if ($post = mysqli_fetch_assoc($result)) {
+        if ($topic = getPostTopic($post["id"])) {
+            $post["topic"] = $topic;
+        }
+    }
+
+    return $post;
+
+}
+
+function getAllTopics()
+{
+    global $conn;
+    $topics = array();
+
+    $sql = "SELECT * FROM `topics`;";
+
+    $result = mysqli_query($conn, $sql);
+
+    while($topic = mysqli_fetch_assoc($result)){
+        array_push($topics, $topic);
+    }
+
+    return $topics;
+
+}
