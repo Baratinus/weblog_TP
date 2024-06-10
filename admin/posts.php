@@ -3,8 +3,7 @@
 <?php include(ROOT_PATH . '/includes/admin/head_section.php'); ?>
 <?php include(ROOT_PATH . '/admin/create_post.php'); ?>
 <?php
-$posts = getAllPosts();
-var_dump($errors);
+$things = getAllPosts();
 ?>
 
 <title>Admin | Manage Posts</title>
@@ -23,7 +22,7 @@ var_dump($errors);
 			<!-- Display notification message -->
 			<?php include(ROOT_PATH . '/includes/public/messages.php') ?>
 
-			<?php if (empty($posts)) : ?>
+			<?php if (empty($things)) : ?>
 				<h1>No Posts in the database.</h1>
 			<?php else : ?>
 				<table class="table">
@@ -37,14 +36,14 @@ var_dump($errors);
                         <th colspan="5">Delete</th>
 					</thead>
 					<tbody>
-						<?php foreach ($admins as $key => $admin) : ?>
+						<?php foreach ($things as $key => $thing) : ?>
 							<tr>
 								<td><?php echo $key + 1; ?></td>
 								<td>
-									<?php echo $posts['Author']; ?>, &nbsp;
-									<?php echo $posts['Title']; ?>
+									<?php echo $things['Author']; ?>, &nbsp;
+									<?php echo $things['Title']; ?>
 								</td>
-								<td><?php echo $posts['Views']; ?></td>
+								<td><?php echo $things['Views']; ?></td>
                                 <td>
                                     <a class="fa fa-checkmark btn publish" href="posts.php?publish-posts=<?php echo $posts['id'] ?>"> 
                                     </a>
