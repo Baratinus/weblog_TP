@@ -45,13 +45,13 @@ $things = getAllPosts();
 								<td><?php echo $thing['views']; ?>
 								</td>
                                 <td>  
-									<a class="fa <?= $thing['published']==1 ? 'fa-close btn publish':'fa-check btn unpublish'?>" href="posts.php?publish-posts=<?php echo $posts['id']; ?>"></a>
+									<a class="fa <?= $thing['published']==1 ? 'fa-close btn publish':'fa-check btn unpublish'?>" href="create_post.php.php?publish-posts=<?php echo $thing['id']; ?>"></a>
 								</td>
 								<td>
-									<a class="fa fa-pencil btn edit" href="posts.php?edit-posts=<?php echo $posts['id']; ?>"></a>
+									<a class="fa fa-pencil btn edit" href="create_post.php?edit-posts=<?php echo $thing['id']; ?>"></a>
 								</td>
 								<td>
-									<a class="fa fa-trash btn delete" href="posts.php?delete-posts=<?php echo $posts['id']; ?>"></a>
+									<a class="fa fa-trash btn delete" href="create_post.php.php?delete-posts=<?php echo $thing['id']; ?>"></a>
 								</td>
 							</tr>
 						<?php endforeach ?>
