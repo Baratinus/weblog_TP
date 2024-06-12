@@ -13,13 +13,17 @@ $post_topic = "";
 - Post actions
 - - - - - - - - - - -*/
 
-if (isset($_POST['update_post'])) {
+if (isset($_POST['create_post'])) {
+    createPost($_POST);
+}
+
+else if (isset($_POST['update_post'])) {
     updatePost($_POST);
 }
 
-// Si l'utilisateur clique sur "update"
-else if (isset($_POST['create_post'])) {
-    createPost($_POST);
+else if (isset($_GET['edit-post'])) {
+    $post_id = $_GET[`edit-post`];
+    editPost($_POST);
 }
 
 /* - - - - - - - - - -
@@ -49,6 +53,7 @@ function getAllPosts() {
 }
 
 function checkFormPost($request_values){
+    global $errors, $title, $featured_image, $topic_id, $body;
 
     if (empty($request_values["title"])) {
         array_push($errors, "Title required");
