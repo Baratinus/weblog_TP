@@ -81,18 +81,29 @@ function getPublishedPostsByTopic($topic_id) {
     $result = mysqli_query($conn, $sql);
 
     // fetch all posts as an associative array called $posts
-    $posts = mysqli_fetch_assoc($result);
     $final_posts = array();
 
 
-    echo("coucou");
-
-    foreach ($posts as $post) {
+    while($post = mysqli_fetch_assoc($result)){
         $post['topic'] = getPostTopic($post['id']);
         array_push($final_posts, $post);
-        var_dump($post);
     }
 
 
     return $final_posts;
+}
+
+function getNameTopic($topic){
+
+    global $conn;
+
+    $sql = "SELECT `name` FROM  `topics` WHERE id = $topic;";
+
+    $result = mysqli_query($conn, $sql);
+
+    if($topicname = mysqli_fetch_assoc($result)){
+        return $topicname['name'];
+    }
+
+    return NULL;
 }
