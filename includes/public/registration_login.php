@@ -40,9 +40,15 @@ if (isset($_POST['register_btn'])) {
             $password = md5($password); // encrypt password
             $sql = "INSERT INTO users (username, email, password, role) VALUES ('$username', '$email', '$password', 'Author');";//to do timestamp
             $result = mysqli_query($conn, $sql);
+
+            // récupérer id dernièrement crée
+            $reg_user_id = mysqli_insert_id($conn);
+
+            // put logged in user into session array
+            $_SESSION['user'] = getUserById($reg_user_id);
         
             if ($result ==true){
-                if (in_array($_SESSION['user']['role'], ["Admin", "Author"])) {
+                if (in_array($_SESSION['user']['role'], ["Admin"])) {
                     $_SESSION['message'] = "You are now logged in";
     
                     // redirect to admin area
