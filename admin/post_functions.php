@@ -14,13 +14,53 @@ $post_topic = "";
 // get all posts from WEBLOG DATABSE
 function getAllPosts() {
     global $conn ;
+
+    $posts = array();
+
+    $sql = "SELECT * FROM `posts`;";
+
+    $result = mysqli_query($conn, $sql);
+
+    while($post = mysqli_fetch_assoc($result)){
+        if ($username = getPostAuthorById($post["user_id"])) {
+            $post["author"] = $username;
+            array_push($posts, $post);
+        }
+    }
+
     // fonction a besoin de la fonction getPostAuthorById
     // le code de getPostAuthorById est KDO
-    //TO DO
-    //return $posts ;
+
+    return $posts ;
 }
 function createPost($request_values) {
     global $conn, $errors, $title, $featured_image, $topic_id, $body, $published;
+
+    if (empty($title)) {
+        array_push($errors, "Title required");
+    }
+    if (empty($featured_image)) {
+        array_push($errors, "Image required");
+    }
+    if (empty($body)) {
+        array_push($errors, "Topic required");
+    }
+    if (empty($topic_id)) {
+        array_push($errors, "Topic required");
+    }
+
+    if (empty($errors)) {
+        $slug = strtolower($title);
+        $slug = str_replace(" ", "-", $slug);
+        $sql = "INSERT INTO `posts`(`title`, `slug`, `views`, `image`, `body`, `published`) VALUES ('$title', '$slug', 0, '$featured_image', '$body', '$published');";
+
+        $result = mysqli_query($conn, $sql);
+    
+        if ($result == true) {
+            $_SESSION['message'] = "Admin user created successfully";
+        }
+    }
+    
 }
     // get the author/username of a post
 function getPostAuthorById($user_id){
@@ -29,12 +69,13 @@ function getPostAuthorById($user_id){
     $result = mysqli_query($conn, $sql) ;
     if ($result) {
         // return username
-        return mysqli_fetch_assoc($result)[‘username’] ;
+        return mysqli_fetch_assoc($result)['username'] ;
     } 
     else {
         return null ;
     }
 }
+
 function editPost($role_id){
     global $conn, $title, $post_slug, $body, $isEditingPost, $post_id;
 }
