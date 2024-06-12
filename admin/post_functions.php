@@ -47,30 +47,42 @@ function getAllPosts() {
 
     return $posts ;
 }
-function createPost($request_values) {
-    global $conn, $errors, $title, $featured_image, $topic_id, $body, $published;
+
+function checkFormPost($request_values){
 
     if (empty($request_values["title"])) {
         array_push($errors, "Title required");
+    }else{
+        $title = $request_values["title"];
     }
     $image = $_FILES;
     if (empty($image)) {
         array_push($errors, "Image required");
+    } else{
+        $featured_image = $image["featured_image"]['name'];
     }
     if (empty($request_values["body"])) {
         array_push($errors, "Body required");
+    } else{
+        $body = $request_values["body"];
     }
     if (empty($request_values["topic_id"])) {
         array_push($errors, "Topic required");
+    } else {
+        $topic_id = $request_values["topic_id"];
     }
+}
+
+function createPost($request_values) {
+    global $conn, $errors, $title, $featured_image, $topic_id, $body, $published;
+
+    checkFormPost($request_values);
 
     if (empty($errors)) {
-        $title = $request_values["title"];
-        $featured_image = $image["featured_image"]['name'];
-        $body = $request_values["body"];
-        $topic_id = $request_values["topic_id"];
         $slug = createSlug($title);
         $currentDate = date("Y-m-d h:i:s");
+
+        //getUserId à faire
 
         $sql = "INSERT INTO `posts`(`user_id`, `title`, `slug`, `views`, `image`, `body`, `published`, `updated_at`) VALUES (1, '$title', '$slug', 0, '$featured_image', '$body', '$published', '$currentDate');";
 
@@ -100,12 +112,36 @@ function getPostAuthorById($user_id){
     }
 }
 
-function editPost($role_id){
-    global $conn, $title, $post_slug, $body, $isEditingPost, $post_id;
+function editPost($post_id){
+    global $conn, $title, $post_slug, $body, $isEditingPost;
+
+    $sql = "SELECT `id`, `title`, `slug`, `body` FROM `posts` WHERE id=$post_id;";
+
+    $result = mysqli_query($conn, $sql);
+
+    if($post = mysqli_fetch_assoc($result)){
+        $title = $post['title'];
+        $post_slug = $post['slug'];
+        $body = $post['body'];
+        $isEditingPost = true;
+    }
+
+
+
+
 }
 function updatePost($request_values){
     global $conn, $errors, $post_id, $title, $featured_image, $topic_id, $body, $published;
+
+    checkFormPost($request_values);
+
+    if(empty($errors)){
+        $slug = createPost($title);
+        $post_id=$_GET['edit-posts'];
+        $sql = "UPDATE `posts` SET `title`=$title, `featured-image`=$featured_image, `topic_id`=$topic_id, `body=$body WHERE id=$post_id;";
+    }
 }
+
 // delete blog post
 function deletePost($post_id){
     global $conn;
@@ -126,11 +162,3 @@ function togglePublishPost($post_id, $message){
         exit(0);
     }
 }
-
-function createSlug($title){
-    $slug = strtolower($title);
-    $slug = str_replace(" ", "-", $slug);
-    return $slug;
-}
-
-
