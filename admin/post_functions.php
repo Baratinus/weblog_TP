@@ -8,6 +8,20 @@ $post_slug = "";
 $body = "";
 $featured_image = "";
 $post_topic = "";
+
+/* - - - - - - - - - -
+- Post actions
+- - - - - - - - - - -*/
+
+if (isset($_POST['update_post'])) {
+    updatePost($_POST);
+}
+
+// Si l'utilisateur clique sur "update"
+else if (isset($_POST['create_post'])) {
+    createPost($_POST);
+}
+
 /* - - - - - - - - - -
 - Post functions
 - - - - - - - - - - -*/
@@ -36,36 +50,46 @@ function getAllPosts() {
 function createPost($request_values) {
     global $conn, $errors, $title, $featured_image, $topic_id, $body, $published;
 
-    if (empty($title)) {
+    if (empty($request_values["title"])) {
         array_push($errors, "Title required");
     }
-    if (empty($featured_image)) {
+    $image = $_FILES;
+    if (empty($image)) {
         array_push($errors, "Image required");
     }
-    if (empty($body)) {
-        array_push($errors, "Topic required");
+    if (empty($request_values["body"])) {
+        array_push($errors, "Body required");
     }
-    if (empty($topic_id)) {
+    if (empty($request_values["topic_id"])) {
         array_push($errors, "Topic required");
     }
 
     if (empty($errors)) {
-        $slug = strtolower($title);
-        $slug = str_replace(" ", "-", $slug);
-        $sql = "INSERT INTO `posts`(`title`, `slug`, `views`, `image`, `body`, `published`) VALUES ('$title', '$slug', 0, '$featured_image', '$body', '$published');";
+        $title = $request_values["title"];
+        $featured_image = $image["featured_image"]['name'];
+        $body = $request_values["body"];
+        $topic_id = $request_values["topic_id"];
+        $slug = createSlug($title);
+        $currentDate = date("Y-m-d h:i:s");
 
-        $result = mysqli_query($conn, $sql);
+        $sql = "INSERT INTO `posts`(`user_id`, `title`, `slug`, `views`, `image`, `body`, `published`, `updated_at`) VALUES (1, '$title', '$slug', 0, '$featured_image', '$body', '$published', '$currentDate');";
+
+        echo $sql;
+        
     
-        if ($result == true) {
-            $_SESSION['message'] = "Admin user created successfully";
+        if ($result = mysqli_query($conn, $sql)) {
+            $_SESSION['message'] = "Article created succesfully";
         }
+
+        header('location: posts.php');
+        exit(0);
     }
     
 }
     // get the author/username of a post
 function getPostAuthorById($user_id){
     global $conn ;
-    $sql = "SELECT username FROM users WHERE id=$user_id";
+    $sql = "SELECT `username` FROM `users` WHERE id=$user_id";
     $result = mysqli_query($conn, $sql) ;
     if ($result) {
         // return username
@@ -101,6 +125,12 @@ function togglePublishPost($post_id, $message){
         header("location: posts.php");
         exit(0);
     }
+}
+
+function createSlug($title){
+    $slug = strtolower($title);
+    $slug = str_replace(" ", "-", $slug);
+    return $slug;
 }
 
 
