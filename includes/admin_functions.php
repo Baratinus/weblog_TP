@@ -163,15 +163,16 @@ function deleteAdmin(){
 * - sets admin fields on form for editing
 * * * * * * * * * * * * * * * * * * * * * */
 function editAdmin(){
-    global $conn, $username, $isEditingUser, $admin_id, $email;
+    global $conn, $username, $isEditingUser, $admin_id, $email, $role;
     
-    $sql = "SELECT `username`, `email` FROM `users` WHERE `id` = $admin_id;";
+    $sql = "SELECT `username`, `email`, `role` FROM `users` WHERE `id` = $admin_id;";
 
     $result = mysqli_query($conn, $sql);
     
     if ($user = mysqli_fetch_assoc($result)) {
         $username = $user['username'];
         $email = $user['email'];
+        $role = $user['role'];
         $isEditingUser = true;
     }
 }

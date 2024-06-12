@@ -43,10 +43,11 @@ $admins = getAdminUsers(); // by admin roles i mean (Admin or Author), table use
 				<input type="password" name="passwordConfirmation" placeholder="Password confirmation">
 
 				<select name="role_id">
-					<option value="" selected disabled>Assign role</option>
-					<?php foreach ($roles as $role) : ?>
-						<option value="<?php echo $role['role']; ?>">
-							<?php echo $role['role']; ?>
+					<option value="" <?= $isEditingUser ? '' : 'selected' ?> disabled>Assign role</option>
+					<?php foreach ($roles as $role_value) : ?>
+					<?php echo $role_value['role'] . " == " . $role ?>
+						<option <?= $role_value['role'] == $role ? 'selected' : '' ?> value="<?php echo $role_value['role']; ?>">
+							<?php echo $role_value['role']; ?>
 						</option>
 					<?php endforeach ?>
 				</select>
