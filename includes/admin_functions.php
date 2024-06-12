@@ -221,7 +221,8 @@ function updateAdmin($request_values){
 
     if (empty($errors)) {
         $password = md5($request_values["password"]); // encrypt password
-        $sql = "UPDATE `users` SET `username`='$username',`email`='$email',`role`='$role',`password`='$password' WHERE `users`.`id` = $admin_id;";
+        $currentDate = date("Y-m-d H:i:s");
+        $sql = "UPDATE `users` SET `username`='$username',`email`='$email',`role`='$role',`password`='$password', `updated_at`='$currentDate' WHERE `users`.`id` = $admin_id;";
 
         echo $sql;
 
