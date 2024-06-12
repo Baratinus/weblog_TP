@@ -148,7 +148,8 @@ function createAdmin($request_values){
     if (empty($errors)) {
         //insert new user
         $password = md5($request_values["password"]); // encrypt password
-        $sql = "INSERT INTO users (username, email, password, role) VALUES ('$username', '$email', '$password', '$role');";//to do timestamp
+        $currentDate = date("Y-m-d H:i:s");
+        $sql = "INSERT INTO users (username, email, password, role, updated_at) VALUES ('$username', '$email', '$password', '$role', '$currentDate');";//to do timestamp
 
         $result = mysqli_query($conn, $sql);
     
