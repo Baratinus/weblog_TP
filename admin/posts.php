@@ -31,30 +31,23 @@ $things = getAllPosts();
 						<th>Author</th>
 						<th>Title</th>
                         <th>Views</th>
-						<th colspan="5">Publish</th>
-                        <th colspan="5">Edit</th>
-                        <th colspan="5">Delete</th>
+						<th colspan="10">Action</th>
 					</thead>
 					<tbody>
 						<?php foreach ($things as $key => $thing) : ?>
 							<tr>
 								<td><?php echo $key + 1; ?></td>
 								<td>
-									<?php echo $things['Author']; ?>, &nbsp;
-									<?php echo $things['Title']; ?>
+									<?php echo $things['Author']; ?>
+								</td>
+								<td><?php echo $things['Title']; ?>
 								</td>
 								<td><?php echo $things['Views']; ?></td>
-                                <td>
-                                    <a class="fa fa-checkmark btn publish" href="posts.php?publish-posts=<?php echo $posts['id'] ?>"> 
-                                    </a>
+                                <td><a class="fa fa-check btn unpublish" href="posts.php?publish-posts=<?php echo $posts['id']; ?>"></a>
                                 </td>
-								<td>
-									<a class="fa fa-pencil btn edit" href="posts.php?edit-posts=<?php echo $posts['id'] ?>">
-									</a>
+								<td><a class="fa fa-pencil btn edit" href="posts.php?edit-posts=<?php echo $posts['id']; ?>"></a>
 								</td>
-								<td>
-									<a class="fa fa-trash btn delete" href="posts.php?delete-posts=<?php echo $posts['id'] ?>">
-									</a>
+								<td><a class="fa fa-trash btn delete" href="posts.php?delete-posts=<?php echo $posts['id']; ?>"></a>
 								</td>
 							</tr>
 						<?php endforeach ?>
