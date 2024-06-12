@@ -3,7 +3,8 @@
 <?php include('includes/all_functions.php'); ?>
 
 <?php $topic = $_GET['topic']; ?>
-<title>| MyWebSite</title>
+<?php $topicname = getNameTopic($topic) ?>
+<title><?php echo ($topicname)?> | MyWebSite</title>
 
 </head>
 <body>
@@ -16,7 +17,7 @@
 
     <!-- content -->
 		<div class="content">
-			<h2 class="content-title"><?php echo $topic ?> Articles</h2>
+			<h2 class="content-title"><?php echo $topicname ?> Articles</h2>
 			<hr>
 			<?php foreach(getPublishedPostsByTopic($topic) as $post) {?>
 				
