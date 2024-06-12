@@ -40,7 +40,8 @@ $things = getAllPosts();
 								<td><?php echo $key + 1; ?></td>
 								<td><?php echo $thing["author"]; ?>
 								</td>
-								<td><?php echo $thing['title']; ?>
+								<td>
+									<a href="<?php echo BASE_URL . "single_post.php?post-slug=".$thing['slug'];?>"> <?php echo $thing['title']; ?></a>
 								</td>
 								<td><?php echo $thing['views']; ?>
 								</td>
