@@ -42,6 +42,28 @@ else if (isset($_GET['delete-admin'])) {
 }
 
 
+/* - - - - - - - - - -
+- Topic actions
+- - - - - - - - - - -*/
+else if (isset($_POST['create_topic'])) {
+    createTopic($_POST);
+}
+
+else if (isset($_POST['update_topic'])) {
+    updateTopic($_POST);
+}
+
+else if (isset($_GET['edit-topic'])) {
+    $topic_id = $_GET['edit-topic'];
+    editTopic();
+}
+
+else if (isset($_GET['delete-topic'])) {
+    $topic_id = $_GET['delete-topic'];
+    deleteTopic();
+}
+
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 * - Returns all admin users and their corresponding roles
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -218,6 +240,61 @@ function updateAdmin($request_values){
 
 
 
+/**
+ * Récupérer l'ensemble des topics de la BDD
+ */
+function getTopics() {
+    global $conn;
+
+    $topics = array();
+
+    $sql = "SELECT * FROM `topics`";
+    
+    $result = mysqli_query($conn, $sql);
+
+    while ($topic = mysqli_fetch_assoc($result)) {
+        array_push($topics, $topic);
+    }
+
+    return $topics;  
+}
+
+
+/**
+ * Générer un nouvelle id pour un topic, incrémentation de 1 par rapport au dernier id
+ */
+function getNewIdTopics() {
+    global $conn;
+
+    $sql = "SELECT MAX(`id`) AS max_id FROM `topics`;";
+
+    $result = mysqli_query($conn, $sql);
+
+    if ($id = mysqli_fetch_assoc($result)) {
+        return intval($id['max_id']) + 1;
+    } else {
+        return 0;
+    }
+}
+
+
+function checkSlugExist($slug) {
+    global $conn;
+
+    $sql = "SELECT COUNT(*) AS N FROM `topics` WHERE `slug` LIKE '$slug';";
+
+    $result = mysqli_query($conn, $sql);
+
+    if ($n = mysqli_fetch_assoc($result)) {
+        if ($n['N'] != '0') {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
 function createTopic($request_values) {
     global $conn, $errors, $topic_name;
 
@@ -227,28 +304,95 @@ function createTopic($request_values) {
         $topic_name = $request_values["topic_name"];
     }
 
+    $topic_slug = createSlug($topic_name);
+
+    if (checkSlugExist($topic_slug)) {
+        array_push($errors, "Topic name already exist");
+    }
+
     if (empty($errors)) {
-        $sql = "INSERT INTO users (username, email, password, role) VALUES ('$username', '$email', '$password', '$role');";
+        $topic_id = getNewIdTopics();
+        $sql = "INSERT INTO `topics`(`id`, `name`, `slug`) VALUES ('$topic_id', '$topic_name','$topic_slug');";
 
         $result = mysqli_query($conn, $sql);
     
         if ($result == true) {
-            $_SESSION['message'] = "Admin user created successfully";
+            $_SESSION['message'] = "Topic created successfully";
         }
 
-        header('location: users.php');
+        header('location: topics.php');
         exit(0);
     }
 }
 
 
-function editTopicr() {}
+function editTopic() {
+    global $conn, $topic_id, $isEditingTopic, $topic_name;
+    
+    $sql = "SELECT * FROM `topics` WHERE `id` = $topic_id;";
+
+    $result = mysqli_query($conn, $sql);
+    
+    if ($topic = mysqli_fetch_assoc($result)) {
+        $topic_id = $topic['id'];
+        $topic_name = $topic['name'];
+        $isEditingTopic = true;
+    }
+}
 
 
-function updateTopic() {}
+function updateTopic($request_values) {
+    global $conn, $errors, $topic_id, $isEditingTopic, $topic_name;
+
+    if (empty($request_values["topic_name"])) {
+        array_push($errors, "Topic name required");
+    } else {
+        $topic_name = $request_values["topic_name"];
+    }
+    if (empty($request_values["topic_id"])) {
+        array_push($errors, "Topic name required");
+    } else {
+        $topic_id = $request_values["topic_id"];
+    }
+
+    $topic_slug = createSlug($topic_name);
+
+    if (checkSlugExist($topic_slug)) {
+        array_push($errors, "Topic name already exist");
+    }
+
+    if (empty($errors)) {
+        $sql = "UPDATE `topics` SET `name`='$topic_name',`slug`='$topic_slug' WHERE `topics`.`id` = $topic_id;";
+
+        echo $sql;
+
+        $result = mysqli_query($conn, $sql);
+    
+        if ($result == true) {
+            $_SESSION['message'] = "Topic updated successfully";
+        }
+
+        header('location: topics.php');
+        exit(0);
+    } else {
+        $isEditingTopic = true;
+    }
+}
 
 
-function deleteTopic() {}
+function deleteTopic() {
+    global $conn, $topic_id;
+    
+    $sql = "DELETE FROM `topics` WHERE `topics`.`id` = $topic_id;";
+
+    if (mysqli_query($conn, $sql)) {
+        $_SESSION['message'] = "Topic deleted successfully";
+    }
+
+    header('location: topics.php');
+    exit(0);
+}
+
 
 function createSlug($title){
     $slug = strtolower($title);
