@@ -249,3 +249,9 @@ function updateTopic() {}
 
 
 function deleteTopic() {}
+
+function createSlug($title){
+    $slug = strtolower($title);
+    $slug = str_replace(" ", "-", $slug);
+    return $slug;
+}
