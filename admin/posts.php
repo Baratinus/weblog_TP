@@ -37,12 +37,12 @@ $things = getAllPosts();
 							<tr>
 								<td><?php echo $key + 1; ?></td>
 								<td>
-									<?php echo $things['Author']; ?>
+									<?php echo $thing["author"]; ?>
 								</td>
-								<td><?php echo $things['Title']; ?>
+								<td><?php echo $thing['title']; ?>
 								</td>
-								<td><?php echo $things['Views']; ?></td>
-                                <td><a class="fa fa-check btn unpublish" href="posts.php?publish-posts=<?php echo $posts['id']; ?>"></a>
+								<td><?php echo $thing['views']; ?></td>
+                                <td>  <a class="fa <?= $thing['published']==1 ? 'fa-close btn publish':'fa-check btn unpublish'?>" href="posts.php?publish-posts=<?php echo $posts['id']; ?>"></a>
                                 </td>
 								<td><a class="fa fa-pencil btn edit" href="posts.php?edit-posts=<?php echo $posts['id']; ?>"></a>
 								</td>
