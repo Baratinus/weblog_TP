@@ -215,3 +215,37 @@ function updateAdmin($request_values){
         $isEditingUser = true;
     }
 }
+
+
+
+function createTopic($request_values) {
+    global $conn, $errors, $topic_name;
+
+    if (empty($request_values["topic_name"])) {
+        array_push($errors, "Topic name required");
+    } else {
+        $topic_name = $request_values["topic_name"];
+    }
+
+    if (empty($errors)) {
+        $sql = "INSERT INTO users (username, email, password, role) VALUES ('$username', '$email', '$password', '$role');";
+
+        $result = mysqli_query($conn, $sql);
+    
+        if ($result == true) {
+            $_SESSION['message'] = "Admin user created successfully";
+        }
+
+        header('location: users.php');
+        exit(0);
+    }
+}
+
+
+function editTopicr() {}
+
+
+function updateTopic() {}
+
+
+function deleteTopic() {}
