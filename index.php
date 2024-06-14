@@ -31,7 +31,9 @@
 			<?php foreach (getPublishedPosts() as $post) { ?>
 				
 			<div class="post" style="margin-left: 0px;">
-				<img class="post_image" src="<?php echo 'static/images/' . $post["image"]; ?>" alt="">
+				<img class="post_image" 
+					 src="<?= $post["image"] != "" ? 'static/images/' . $post["image"] : 'static/images/banner.jpg' ?>" 
+					 alt="image de <?= $post['title'] ?>">
 				<div class="category"><?php echo $post["topic"]; ?></div>
 
 				<div class="post_info">
