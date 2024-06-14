@@ -63,6 +63,10 @@ th {
 	padding: 13px 20px;
 	text-decoration: none;
 }
+.btn:hover {
+	background: #3E606F;
+	cursor: pointer;
+}
 /* * * * * * * * * *
 *
 * HEADER
@@ -225,8 +229,14 @@ th {
 .table-div .edit {
 	background: #004220;
 }
+.table-div .edit:hover {
+	background: green;
+}
 .table-div .delete {
 	background: #F70E1A;
+}
+.table-div .delete:hover {
+	background: darkred;
 }
 .table-div .publish {
 	background: red;
