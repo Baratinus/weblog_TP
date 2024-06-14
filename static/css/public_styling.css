@@ -56,6 +56,10 @@ form input:focus {
 	margin: 10px 0px;
 	padding: 13px 20px;
 	text-decoration: none;
+	cursor: pointer;
+}
+.btn:hover {
+	background: #334F5C;
 }
 
 .container {
@@ -171,6 +175,9 @@ form input:focus {
 	display: block;
 	background: #006384;
 	margin-left: 20%;
+}
+.banner .login_div form button:hover {
+	background: #334F5C;
 }
 
 
