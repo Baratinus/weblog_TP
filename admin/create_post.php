@@ -50,11 +50,10 @@
 					>
 
 				<textarea name="body" id="body" cols="30" rows="10"><?php echo $body; ?></textarea>
-				
 				<select name="topic_id">
-					<option value="" selected disabled>Choose topic</option>
+					<option value="" <?= $isEditingPost ? "" : "selected"?> disabled>Choose topic</option>
 					<?php foreach ($topics as $topic): ?>
-						<option value="<?php echo $topic['id']; ?>">
+						<option <?= $topic_id == $topic['id'] ? "selected" : ""?> value="<?php echo $topic['id']; ?>">
 							<?php echo $topic['name']; ?>
 						</option>
 					<?php endforeach ?>
