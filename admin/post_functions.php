@@ -27,6 +27,11 @@ else if (isset($_GET["edit-posts"])) {
     editPost();
 }
 
+else if (isset($_GET['publish-posts'])) {
+    $post_id = $_GET['publish-posts'];
+    togglePublishPost($post_id, "Change publish post");
+}
+
 /* - - - - - - - - - -
 - Post functions
 - - - - - - - - - - -*/
