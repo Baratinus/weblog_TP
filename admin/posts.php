@@ -52,7 +52,7 @@ $things = getAllPosts();
 									<a class="fa fa-pencil btn edit" href="create_post.php?edit-posts=<?php echo $thing['id']; ?>"></a>
 								</td>
 								<td>
-									<a class="fa fa-trash btn delete" href="create_post.php.php?delete-posts=<?php echo $thing['id']; ?>"></a>
+									<a class="fa fa-trash btn delete" href="create_post.php?delete-posts=<?php echo $thing['id']; ?>"></a>
 								</td>
 							</tr>
 						<?php endforeach ?>
