@@ -160,10 +160,14 @@ function updatePost($request_values){
         $slug = createSlug($title);
         move_uploaded_file($file_temp, ROOT_PATH."/static/images/".$featured_image);
 
-        $sql = "UPDATE `posts` SET `title`=$title, `featured-image`=$featured_image, `topic_id`=$topic_id, `body`=$body WHERE id=$post_id;";
+        $sql_post = "UPDATE `posts` SET `title`='$title', `image`='$featured_image', `body`='$body' WHERE id=$post_id;";
 
-        if ($result = mysqli_query($conn, $sql)) {
+        $sql_topic = "UPDATE `post_topic` SET `topic_id`=$topic_id WHERE `post_id`=$post_id;";
+
+        if ($result = mysqli_query($conn, $sql_post)) {
+            if ($result = mysqli_query($conn, $sql_topic)) {
             $_SESSION['message'] = "Article updated succesfully";
+            }
         }
 
         header('location: posts.php');
