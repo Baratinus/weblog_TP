@@ -268,6 +268,8 @@ form input:focus {
 	background: #f2dede; 
 	border: 1px solid #a94442; 
 	margin-bottom: 20px;
+	padding: 5px;
+	text-align: center;
 }
 
 .validation_errors p {
