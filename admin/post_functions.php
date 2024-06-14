@@ -152,7 +152,7 @@ function editPost(){
 
 }
 function updatePost($request_values){
-    global $conn, $errors, $post_id, $title, $featured_image, $file_temp, $topic_id, $body, $published;
+    global $conn, $errors, $post_id, $title, $featured_image, $file_temp, $topic_id, $body, $published, $isEditingPost;
 
     checkFormPost($request_values);
 
@@ -172,6 +172,8 @@ function updatePost($request_values){
 
         header('location: posts.php');
         exit(0);
+    } else {
+        $isEditingPost = true;
     }
 
     
