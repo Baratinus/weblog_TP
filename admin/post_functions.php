@@ -19,6 +19,7 @@ if (isset($_POST['create_post'])) {
 }
 
 else if (isset($_POST['update_post'])) {
+    $post_id = $_POST["post_id"];
     updatePost($_POST);
 }
 
@@ -131,16 +132,18 @@ function getPostAuthorById($user_id){
 }
 
 function editPost(){
-    global $conn, $title, $post_slug, $body, $post_id, $isEditingPost;
+    global $conn, $title, $post_slug, $body, $post_id, $topic_id, $featured_image, $isEditingPost;
 
-    $sql = "SELECT `id`, `title`, `slug`, `body` FROM `posts` WHERE id=$post_id;";
+    $sql_post = "SELECT * FROM `posts` AS P INNER JOIN `post_topic` AS PT ON P.id = PT.post_id WHERE P.id = $post_id;";
 
-    $result = mysqli_query($conn, $sql);
+    $result = mysqli_query($conn, $sql_post);
 
     if($post = mysqli_fetch_assoc($result)){
         $title = $post['title'];
+        $featured_image = $post['image'];
         $post_slug = $post['slug'];
         $body = $post['body'];
+        $topic_id = $post['topic_id'];
         $isEditingPost = true;
     }
 
@@ -149,12 +152,14 @@ function editPost(){
 
 }
 function updatePost($request_values){
-    global $conn, $errors, $post_id, $title, $featured_image, $topic_id, $body, $published;
+    global $conn, $errors, $post_id, $title, $featured_image, $file_temp, $topic_id, $body, $published;
 
     checkFormPost($request_values);
 
     if(empty($errors)){
         $slug = createSlug($title);
+        move_uploaded_file($file_temp, ROOT_PATH."/static/images/".$featured_image);
+
         $sql = "UPDATE `posts` SET `title`=$title, `featured-image`=$featured_image, `topic_id`=$topic_id, `body`=$body WHERE id=$post_id;";
 
         if ($result = mysqli_query($conn, $sql)) {
