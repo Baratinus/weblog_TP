@@ -20,7 +20,7 @@
         <div class="post-wrapper">
             <!-- full post div -->
             <div class="full-post-div">
-                <h2 class="post-title"><?php echo $post['title']; ?><h2>
+                <h2 class="post-title"><?php echo $post['title']; ?></h2>
                 <div class="post-body-div">
                 <?php echo $post['body']; ?>
                 </div>
