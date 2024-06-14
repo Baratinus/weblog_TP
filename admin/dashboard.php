@@ -26,9 +26,7 @@
 				<span>Newly registered users</span>
 			</a>
 			<a href="posts.php">
-				<span><?php $ammount = publishedpostammount();
-				echo $ammount;
-				?></span> <br>
+				<span><?php echo publishedpostammount();?></span> <br>
 				<span>Published posts</span>
 			</a>
 			<a>
