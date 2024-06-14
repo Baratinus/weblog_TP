@@ -401,3 +401,27 @@ function createSlug($title){
     $slug = str_replace(" ", "-", $slug);
     return $slug;
 }
+
+function publishedpostammount(){
+    global $conn, $errors;
+
+    $result=mysqli_query($conn,"SELECT COUNT(*) as n FROM `posts` WHERE published=1;");
+    if ($n = mysqli_fetch_assoc($result)) {
+        return $n['n'];
+    }
+    else {
+        return '?';
+    }
+}
+
+function newuserammount(){
+    global $conn, $errors;
+
+    $result=mysqli_query($conn,"SELECT COUNT(*) as n FROM `users` WHERE created_at >= CURRENT_DATE-INTERVAL 14 DAY; ");
+    if ($n = mysqli_fetch_assoc($result)) {
+        return $n['n'];
+    }
+    else {
+        return '?';
+    }
+}

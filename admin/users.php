@@ -2,8 +2,6 @@
 <?php include(ROOT_PATH . '/includes/admin_functions.php'); ?>
 <?php include(ROOT_PATH . '/includes/admin/head_section.php'); ?>
 
-//BTW: ideally we need to create a role_user table (users<---->role_user<----->roles)
-	// role_user(id, user_id,role_id)
 <?php
 // Get all admin roles from DB : by admin roles i mean (Admin or Author)
 $roles = getAdminRoles(); // table roles
