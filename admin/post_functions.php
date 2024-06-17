@@ -97,12 +97,11 @@ function createPost($request_values) {
 
     if (empty($errors)) {
         $slug = createSlug($title);
-        $currentDate = date("Y-m-d h:i:s");
         move_uploaded_file($file_temp, ROOT_PATH."/static/images/".$featured_image);
 
         $user_id = getUserId();
 
-        $sql_post = "INSERT INTO `posts`(`user_id`, `title`, `slug`, `views`, `image`, `body`, `published`, `updated_at`) VALUES ($user_id, '$title', '$slug', 0, '$featured_image', '$body', '$published', '$currentDate');";
+        $sql_post = "INSERT INTO `posts`(`user_id`, `title`, `slug`, `views`, `image`, `body`, `published`, `updated_at`) VALUES ($user_id, '$title', '$slug', 0, '$featured_image', '$body', $published, CURRENT_DATE);";
 
         if ($result = mysqli_query($conn, $sql_post)) {
             $post_id = mysqli_insert_id($conn);
