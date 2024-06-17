@@ -10,24 +10,21 @@ $featured_image = "";
 $file_temp = "";
 $post_topic = "";
 
+
 /* - - - - - - - - - -
 - Post actions
 - - - - - - - - - - -*/
-
 if (isset($_POST['create_post'])) {
     createPost($_POST);
 }
-
 else if (isset($_POST['update_post'])) {
     $post_id = $_POST["post_id"];
     updatePost($_POST);
 }
-
 else if (isset($_GET["edit-posts"])) {
     $post_id = $_GET["edit-posts"];
     editPost();
 }
-
 else if (isset($_GET['publish-posts'])) {
     $post_id = $_GET['publish-posts'];
     togglePublishPost($post_id, "Change publish post");
@@ -36,6 +33,7 @@ else if (isset($_GET["delete-posts"])) {
     $post_id = $_GET["delete-posts"];
     deletePost($post_id);
 }
+
 
 /* - - - - - - - - - -
 - Post functions
@@ -63,17 +61,18 @@ function getAllPosts() {
     return $posts ;
 }
 
+
 function checkFormPost($request_values){
     global $errors, $title, $featured_image, $topic_id, $body, $file_temp;
 
     if (empty($request_values["title"])) {
         array_push($errors, "Title required");
-    }else{
+    } else {
         $title = htmlspecialchars($request_values["title"]);
     }
     if (empty($request_values["body"])) {
         array_push($errors, "Body required");
-    } else{
+    } else {
         $body = $request_values["body"];
     }
     if (empty($request_values["topic_id"])) {
@@ -82,6 +81,7 @@ function checkFormPost($request_values){
         $topic_id = $request_values["topic_id"];
     }
 }
+
 
 function createPost($request_values) {
     global $conn, $errors, $title, $featured_image, $file_temp, $topic_id, $body, $published;
@@ -119,10 +119,11 @@ function createPost($request_values) {
 
         header('location: posts.php');
         exit(0);
-    }
-    
+    }  
 }
-    // get the author/username of a post
+
+
+// get the author/username of a post
 function getPostAuthorById($user_id){
     global $conn ;
     $sql = "SELECT `username` FROM `users` WHERE id=$user_id";
@@ -136,6 +137,7 @@ function getPostAuthorById($user_id){
     }
 }
 
+
 function editPost(){
     global $conn, $title, $post_slug, $body, $post_id, $topic_id, $featured_image, $isEditingPost;
 
@@ -143,19 +145,20 @@ function editPost(){
 
     $result = mysqli_query($conn, $sql_post);
 
-    if($post = mysqli_fetch_assoc($result)){
+    if ($post = mysqli_fetch_assoc($result)) {
         $title = $post['title'];
         $featured_image = $post['image'];
         $post_slug = $post['slug'];
         $body = $post['body'];
         $topic_id = $post['topic_id'];
         $isEditingPost = true;
+    } else {
+        header("location: posts.php");
+        exit(0);
     }
-
-
-
-
 }
+
+
 function updatePost($request_values){
     global $conn, $errors, $post_id, $title, $featured_image, $file_temp, $topic_id, $body, $published, $isEditingPost;
 
@@ -190,10 +193,9 @@ function updatePost($request_values){
         exit(0);
     } else {
         $isEditingPost = true;
-    }
-
-    
+    }    
 }
+
 
 // delete blog post
 function deletePost($post_id){
@@ -209,6 +211,8 @@ function deletePost($post_id){
         }
     }
 }
+
+
 // toggle blog post : published→unpublished
 function togglePublishPost($post_id, $message){
     global $conn;
@@ -219,6 +223,7 @@ function togglePublishPost($post_id, $message){
         exit(0);
     }
 }
+
 
 function getNewIdPostsTopics() {
     global $conn;
@@ -233,6 +238,7 @@ function getNewIdPostsTopics() {
         return 0;
     }
 }
+
 
 function getUserId(){
     global $conn;

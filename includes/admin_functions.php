@@ -18,23 +18,19 @@ $errors = [];
 /* - - - - - - - - - -
 - Admin users actions
 - - - - - - - - - - -*/
-
 // if user clicks the create admin button
 if (isset($_POST['create_admin'])) {
     createAdmin($_POST);
 }
-
 // Si l'utilisateur clique sur "update"
 else if (isset($_POST['update_admin'])) {
     updateAdmin($_POST);
 }
-
 // Si l'utilisateur clique sur edit d'un admin
 else if (isset($_GET['edit-admin'])) {
     $admin_id = $_GET['edit-admin'];
     editAdmin();
 }
-
 // Si l'utilisateur supprime un admin
 else if (isset($_GET['delete-admin'])) {
     $admin_id = $_GET['delete-admin'];
@@ -197,6 +193,9 @@ function editAdmin(){
         $email = $user['email'];
         $role = $user['role'];
         $isEditingUser = true;
+    } else {
+        header('location: users.php');
+        exit(0);
     }
 }
 
@@ -339,6 +338,9 @@ function editTopic() {
         $topic_id = $topic['id'];
         $topic_name = $topic['name'];
         $isEditingTopic = true;
+    } else {
+        header('location: topics.php');
+        exit(0);
     }
 }
 
@@ -402,6 +404,7 @@ function createSlug($title){
     return $slug;
 }
 
+
 function publishedpostammount(){
     global $conn, $errors;
 
@@ -413,6 +416,7 @@ function publishedpostammount(){
         return '?';
     }
 }
+
 
 function newuserammount(){
     global $conn, $errors;

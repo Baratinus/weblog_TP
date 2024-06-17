@@ -2,7 +2,7 @@
 <?php include('includes/public/head_section.php'); ?>
 <?php include('includes/all_functions.php'); ?>
 
-<?php $slug = $_GET['post-slug']; ?>
+<?php $slug = htmlspecialchars($_GET['post-slug']); ?>
 <?php $post = getPost($slug); ?>
 <title> <?php echo $post['title'] ?> | MyWebSite</title>
 
