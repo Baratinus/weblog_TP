@@ -71,13 +71,6 @@ function checkFormPost($request_values){
     }else{
         $title = $request_values["title"];
     }
-    $image = $_FILES['featured_image'];
-    if (empty($image)) {
-        array_push($errors, "Image required");
-    } else{
-        $featured_image = $image['name'];
-        $file_temp = $image['tmp_name'];
-    }
     if (empty($request_values["body"])) {
         array_push($errors, "Body required");
     } else{
@@ -94,6 +87,15 @@ function createPost($request_values) {
     global $conn, $errors, $title, $featured_image, $file_temp, $topic_id, $body, $published;
 
     checkFormPost($request_values);
+
+    $image = $_FILES['featured_image'];
+    
+    if ($image['name'] == "") {
+        array_push($errors, "Image required");
+    } else{
+        $featured_image = $image['name'];
+        $file_temp = $image['tmp_name'];
+    }
 
     if (empty($errors)) {
         $slug = createSlug($title);
@@ -159,11 +161,22 @@ function updatePost($request_values){
 
     checkFormPost($request_values);
 
+    $image = $_FILES['featured_image'];
+
     if(empty($errors)){
         $slug = createSlug($title);
-        move_uploaded_file($file_temp, ROOT_PATH."/static/images/".$featured_image);
 
-        $sql_post = "UPDATE `posts` SET `title`='$title', `image`='$featured_image', `body`='$body' WHERE id=$post_id;";
+        $sql_post = "UPDATE `posts` SET `title`='$title', ";
+
+        if ($image['name'] != "") {
+            $featured_image = $image['name'];
+            $file_temp = $image['tmp_name'];
+            move_uploaded_file($file_temp, ROOT_PATH."/static/images/".$featured_image);
+
+            $sql_post = $sql_post."`image`='$featured_image', ";
+        }
+
+        $sql_post = $sql_post."`body`='$body' WHERE id=$post_id;";
 
         $sql_topic = "UPDATE `post_topic` SET `topic_id`=$topic_id WHERE `post_id`=$post_id;";
 
