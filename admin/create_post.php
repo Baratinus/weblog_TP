@@ -43,11 +43,14 @@
 					value="<?php echo $title; ?>" 
 					placeholder="Title">
 
-				<label style="float: left; margin: 5px auto 5px;">Featured image</label>
-				<input 
-					type="file"
-					name="featured_image"
-					>
+				<label for="featuredImage" style="float: left; margin: 5px auto 5px;">
+					Featured image, actual : 
+					<?php if ($isEditingPost) : ?>
+					<a href="<?= BASE_URL."/static/images/".$featured_image ?>"><?= $featured_image ?></a>
+					<?php endif ?>
+				</label>
+				
+				<input type="file" name="featured_image" id="featuredImage">
 
 				<textarea name="body" id="body" cols="30" rows="10"><?php echo $body; ?></textarea>
 				<select name="topic_id">
