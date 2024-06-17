@@ -32,6 +32,10 @@ else if (isset($_GET['publish-posts'])) {
     $post_id = $_GET['publish-posts'];
     togglePublishPost($post_id, "Change publish post");
 }
+else if (isset($_GET["delete-posts"])) {
+    $post_id = $_GET["delete-posts"];
+    deletePost($post_id);
+}
 
 /* - - - - - - - - - -
 - Post functions
@@ -182,11 +186,15 @@ function updatePost($request_values){
 // delete blog post
 function deletePost($post_id){
     global $conn;
-    $sql = "DELETE FROM posts WHERE id=$post_id";
-    if (mysqli_query($conn, $sql)) {
+    $sql_post = "DELETE FROM posts WHERE id=$post_id";
+    $sql_topic = "DELETE FROM `post_topic` WHERE post_id=$post_id;";
+
+    if (mysqli_query($conn, $sql_topic)) {
+        if (mysqli_query($conn, $sql_post)) {
         $_SESSION['message'] = "Post successfully deleted";
         header("location: posts.php");
-    exit(0);
+        exit(0);
+        }
     }
 }
 // toggle blog post : published→unpublished
