@@ -29,12 +29,17 @@
 			<hr>
 
 			<?php foreach (getPublishedPosts() as $post) { ?>
-				
+			
 			<div class="post" style="margin-left: 0px;">
 				<img class="post_image" 
 					 src="<?= $post["image"] != "" ? 'static/images/' . $post["image"] : 'static/images/banner.jpg' ?>" 
 					 alt="image de <?= $post['title'] ?>">
-				<div class="category"><?php echo $post["topic"]; ?></div>
+				
+				<a href="filtered_posts.php?topic=<?= $post['topic_id'] ?>">
+					<div class="category">
+						<?php echo $post["topic"]; ?>
+					</div>
+				</a>
 
 				<div class="post_info">
 					<?php echo $post["title"]; ?> 

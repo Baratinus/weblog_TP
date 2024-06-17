@@ -209,6 +209,9 @@ form input:focus {
 	border: 1px solid #b3b3b3;
 	position: relative;
 }
+.content .post a {
+	text-decoration: none;
+}
 
 .content .post .category {
 	margin-top: 0px;

@@ -10,7 +10,8 @@ function getPublishedPosts() {
     
     while ($reg_post = mysqli_fetch_assoc($result)) {
         if ($topic = getPostTopic($reg_post["id"])) {
-            $reg_post["topic"] = $topic;
+            $reg_post["topic"] = $topic["name"];
+            $reg_post["topic_id"] = $topic["id"];
         }
         
         array_push($posts, $reg_post);
@@ -23,16 +24,16 @@ function getPublishedPosts() {
 function getPostTopic($post_id){
     global $conn;
     
-    $sql = "SELECT T.name AS 'name' FROM `post_topic` AS PT INNER JOIN `topics` AS T ON PT.topic_id = T.id WHERE PT.post_id = $post_id;";
+    $sql = "SELECT T.name AS 'name', T.id AS 'id' FROM `post_topic` AS PT INNER JOIN `topics` AS T ON PT.topic_id = T.id WHERE PT.post_id = $post_id;";
 
     $result = mysqli_query($conn, $sql);
 
     if ($reg_topic = mysqli_fetch_assoc($result)) {
-        return $reg_topic["name"];
+        return $reg_topic;
     }
 
     return NULL;
-   }
+}
 
 function getPost($slug)
 {
@@ -44,7 +45,7 @@ function getPost($slug)
 
     if ($post = mysqli_fetch_assoc($result)) {
         if ($topic = getPostTopic($post["id"])) {
-            $post["topic"] = $topic;
+            $post["topic"] = $topic["name"];
         }
     }
 
@@ -76,7 +77,7 @@ function getAllTopics()
 function getPublishedPostsByTopic($topic_id) {
 
     global $conn;
-    $sql = "SELECT * FROM `post_topic` AS PT INNER JOIN `posts` AS P ON PT.post_id = P.id WHERE PT.topic_id = $topic_id;";
+    $sql = "SELECT * FROM `post_topic` AS PT INNER JOIN `posts` AS P ON PT.post_id = P.id WHERE PT.topic_id = $topic_id AND P.published = 1;";
     
     $result = mysqli_query($conn, $sql);
 
@@ -85,7 +86,11 @@ function getPublishedPostsByTopic($topic_id) {
 
 
     while($post = mysqli_fetch_assoc($result)){
-        $post['topic'] = getPostTopic($post['id']);
+        if ($topic = getPostTopic($post["id"])) {
+            $post["topic"] = $topic["name"];
+            $post["topic_id"] = $topic["id"];
+        }
+
         array_push($final_posts, $post);
     }
 
