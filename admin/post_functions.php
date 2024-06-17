@@ -69,7 +69,7 @@ function checkFormPost($request_values){
     if (empty($request_values["title"])) {
         array_push($errors, "Title required");
     }else{
-        $title = $request_values["title"];
+        $title = htmlspecialchars($request_values["title"]);
     }
     if (empty($request_values["body"])) {
         array_push($errors, "Body required");

@@ -115,17 +115,17 @@ function checkForm($request_values) {
     if (empty($request_values["username"])) {
         array_push($errors, "Username required");
     } else {
-        $username = $request_values["username"];
+        $username = htmlspecialchars($request_values["username"]);
     }
     if (empty($request_values["email"])) {
         array_push($errors, "Email required");
     } else {
-        $email = $request_values["email"];
+        $email = htmlspecialchars($request_values["email"]);
     }
     if (empty($request_values["role_id"])) {
         array_push($errors, "Role required");
     } else {
-        $role = $request_values["role_id"];
+        $role = htmlspecialchars($request_values["role_id"]);
     }
 }
 
@@ -303,7 +303,7 @@ function createTopic($request_values) {
     if (empty($request_values["topic_name"])) {
         array_push($errors, "Topic name required");
     } else {
-        $topic_name = $request_values["topic_name"];
+        $topic_name = htmlspecialchars($request_values["topic_name"]);
     }
 
     $topic_slug = createSlug($topic_name);
@@ -349,7 +349,7 @@ function updateTopic($request_values) {
     if (empty($request_values["topic_name"])) {
         array_push($errors, "Topic name required");
     } else {
-        $topic_name = $request_values["topic_name"];
+        $topic_name = htmlspecialchars($request_values["topic_name"]);
     }
     if (empty($request_values["topic_id"])) {
         array_push($errors, "Topic name required");
