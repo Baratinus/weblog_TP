@@ -1,7 +1,4 @@
 <?php
-if(empty($_SESSION)){
-    header('location: '. BASE_URL .'login.php');
-}
 // Admin user variables
 $admin_id = 0;
 $isEditingUser = false;
@@ -17,6 +14,16 @@ $topic_name = "";
 // general variables
 $errors = [];
 
+
+// test is logged in
+if(empty($_SESSION)){
+    header('location: '. BASE_URL .'login.php');
+}
+elseif ($_SESSION['user']['role']!="Admin") {
+    $_SESSION['message']="please login to a user with admin privileges";
+    //array_push($m,"please login to a user with admin privileges");
+    header('location: '. BASE_URL .'login.php');
+}
 /* - - - - - - - - - -
 - Admin users actions
 - - - - - - - - - - -*/
@@ -230,14 +237,8 @@ function updateAdmin($request_values){
     }
 
     if (empty($errors)) {
-        //test existe déja
-        $sql= "SELECT * FROM `users` WHERE username = '$username';";
-        $result = mysqli_query($conn, $sql);
-        if (mysqli_num_rows($result)>=1){
-            array_push($errors,"username is already used! please choose a different username.");
-        }
+        
         //modify user
-        else{
             $password = md5($request_values["password"]); // encrypt password
             $currentDate = date("Y-m-d H:i:s");
             $sql = "UPDATE `users` SET `username`='$username',`email`='$email',`role`='$role',`password`='$password', `updated_at`='$currentDate' WHERE `users`.`id` = $admin_id;";
@@ -252,7 +253,7 @@ function updateAdmin($request_values){
 
             header('location: users.php');
             exit(0);
-        }    
+           
     } //sorti de la condition pas d'erreur
     else {
         $isEditingUser = true;

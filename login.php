@@ -1,4 +1,5 @@
-<?php include('config.php'); ?>
+<?php include('config.php'); 
+var_dump($_SESSION)?>
 
 <?php include('includes/public/registration_login.php'); ?>
 
@@ -19,6 +20,7 @@
 
 
 		<div style="width: 40%; margin: 20px auto;">
+		<?php include(ROOT_PATH . '/includes/public/messages.php') ?>
 			<form method="post" action="login.php">
 				<h2>Login</h2>
 				<?php include(ROOT_PATH . '/includes/public/errors.php') ?>
