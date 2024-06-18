@@ -142,19 +142,27 @@ function createAdmin($request_values){
     }
 
     if (empty($errors)) {
-        //insert new user
-        $password = md5($request_values["password"]); // encrypt password
-        $currentDate = date("Y-m-d H:i:s");
-        $sql = "INSERT INTO users (username, email, password, role, updated_at) VALUES ('$username', '$email', '$password', '$role', '$currentDate');";//to do timestamp
-
+        //test existe déja
+        $sql= "SELECT * FROM `users` WHERE username = '$username';";
         $result = mysqli_query($conn, $sql);
-    
-        if ($result == true) {
-            $_SESSION['message'] = "Admin user created successfully";
+        if (mysqli_num_rows($result)>=1){
+            array_push($errors,"username is already used! please choose a different username.");
         }
+        //insert new user
+        else{
+            $password = md5($request_values["password"]); // encrypt password
+            $currentDate = date("Y-m-d H:i:s");
+            $sql = "INSERT INTO users (username, email, password, role, updated_at) VALUES ('$username', '$email', '$password', '$role', '$currentDate');";//to do timestamp
 
-        header('location: users.php');
-        exit(0);
+            $result = mysqli_query($conn, $sql);
+    
+            if ($result == true) {
+                $_SESSION['message'] = "Admin user created successfully";
+            }
+
+            header('location: users.php');
+            exit(0);
+        }
     }
 }
 
@@ -220,21 +228,31 @@ function updateAdmin($request_values){
     }
 
     if (empty($errors)) {
-        $password = md5($request_values["password"]); // encrypt password
-        $currentDate = date("Y-m-d H:i:s");
-        $sql = "UPDATE `users` SET `username`='$username',`email`='$email',`role`='$role',`password`='$password', `updated_at`='$currentDate' WHERE `users`.`id` = $admin_id;";
-
-        echo $sql;
-
+        //test existe déja
+        $sql= "SELECT * FROM `users` WHERE username = '$username';";
         $result = mysqli_query($conn, $sql);
-    
-        if ($result == true) {
-            $_SESSION['message'] = "Admin user updated successfully";
+        if (mysqli_num_rows($result)>=1){
+            array_push($errors,"username is already used! please choose a different username.");
         }
+        //modify user
+        else{
+            $password = md5($request_values["password"]); // encrypt password
+            $currentDate = date("Y-m-d H:i:s");
+            $sql = "UPDATE `users` SET `username`='$username',`email`='$email',`role`='$role',`password`='$password', `updated_at`='$currentDate' WHERE `users`.`id` = $admin_id;";
 
-        header('location: users.php');
-        exit(0);
-    } else {
+            echo $sql;
+
+            $result = mysqli_query($conn, $sql);
+    
+            if ($result == true) {
+                $_SESSION['message'] = "Admin user updated successfully";
+            }
+
+            header('location: users.php');
+            exit(0);
+        }    
+    } //sorti de la condition pas d'erreur
+    else {
         $isEditingUser = true;
     }
 }

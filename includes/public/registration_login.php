@@ -30,10 +30,10 @@ if (isset($_POST['register_btn'])) {
     if (empty($errors)) {
 
         //test existe déja
-        $sql= "SELECT * FROM `users` WHERE username = '$username' AND email = '$email';";
+        $sql= "SELECT * FROM `users` WHERE username = '$username';";
         $result = mysqli_query($conn, $sql);
         if (mysqli_num_rows($result)>=1){
-            array_push($errors,"user already exists");
+            array_push($errors,"username is already used! please choose a different username.");
         }
         else{
             //insert new user
