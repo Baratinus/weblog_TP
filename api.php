@@ -29,7 +29,7 @@ function getNumberPost() {
 
     $number_post = '';
 
-    $result = mysqli_query($conn,"SELECT COUNT(*) as n FROM `posts` WHERE published=1;");
+    $result = mysqli_query($conn,"SELECT COUNT(*) as n FROM `posts`;");
 
     if ($n = mysqli_fetch_assoc($result)) {
         $number_post = $n['n'];
@@ -63,6 +63,6 @@ function getNumberUser() {
     $response = [
         'number' => $number_user
     ];
-    
+
     echo json_encode($response);
 }
