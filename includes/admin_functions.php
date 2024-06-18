@@ -1,5 +1,7 @@
 <?php
-
+if(empty($_SESSION)){
+    header('location: '. BASE_URL .'login.php');
+}
 // Admin user variables
 $admin_id = 0;
 $isEditingUser = false;
