@@ -1,5 +1,4 @@
-<?php include('config.php'); 
-var_dump($_SESSION)?>
+<?php include('config.php'); ?>
 
 <?php include('includes/public/registration_login.php'); ?>
 
