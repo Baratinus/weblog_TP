@@ -101,17 +101,24 @@ function createPost($request_values) {
         $slug = createSlug($title);
         move_uploaded_file($file_temp, ROOT_PATH."/static/images/".$featured_image);
 
-        $user_id = getUserId();
+        $sql_post = "INSERT INTO `posts`(`user_id`, `title`, `slug`, `views`, `image`, `body`, `published`, `updated_at`) VALUES (?, ?, ?, ?, ?, ?, ?, CURRENT_DATE);";
 
-        $sql_post = "INSERT INTO `posts`(`user_id`, `title`, `slug`, `views`, `image`, `body`, `published`, `updated_at`) VALUES ($user_id, '$title', '$slug', 0, '$featured_image', '$body', $published, CURRENT_DATE);";
+        if ($result = mysqli_prepare($conn, $sql_post)) {
+            $views = 0;
+            $user_id = getUserId();
 
-        if ($result = mysqli_query($conn, $sql_post)) {
+            mysqli_stmt_bind_param($result,'ississi',$user_id,$title,$slug,$views,$featured_image,$body,$published);
+            mysqli_stmt_execute($result);
+
             $post_id = mysqli_insert_id($conn);
             $new_id = getNewIdPostsTopics();
             
-            $sql_topic = "INSERT INTO `post_topic`(`id`,`post_id`, `topic_id`) VALUES ($new_id,$post_id,$topic_id);";
+            $sql_topic = "INSERT INTO `post_topic`(`id`,`post_id`, `topic_id`) VALUES (?, ?, ?);";
             
-            if ($result = mysqli_query($conn, $sql_topic)) {
+            if ($result = mysqli_prepare($conn, $sql_topic)) {
+                mysqli_stmt_bind_param($result,'iii',$new_id,$post_id,$topic_id);
+                mysqli_stmt_execute($result);
+
                 $_SESSION['message'] = "Article created succesfully";
             }
             
@@ -126,11 +133,13 @@ function createPost($request_values) {
 // get the author/username of a post
 function getPostAuthorById($user_id){
     global $conn ;
-    $sql = "SELECT `username` FROM `users` WHERE id=$user_id";
-    $result = mysqli_query($conn, $sql) ;
-    if ($result) {
+    $sql = "SELECT `username` FROM `users` WHERE id= ?";
+    
+    if ($result = mysqli_prepare($conn, $sql)) {
+        mysqli_stmt_bind_param($result,'i',$user_id);
+        mysqli_stmt_execute($result);
         // return username
-        return mysqli_fetch_assoc($result)['username'] ;
+        return mysqli_fetch_assoc(mysqli_stmt_get_result($result))['username'] ;
     } 
     else {
         return null ;
@@ -141,11 +150,13 @@ function getPostAuthorById($user_id){
 function editPost(){
     global $conn, $title, $post_slug, $body, $post_id, $topic_id, $featured_image, $isEditingPost;
 
-    $sql_post = "SELECT * FROM `posts` AS P INNER JOIN `post_topic` AS PT ON P.id = PT.post_id WHERE P.id = $post_id;";
+    $sql_post = "SELECT * FROM `posts` AS P INNER JOIN `post_topic` AS PT ON P.id = PT.post_id WHERE P.id = ?;";
 
-    $result = mysqli_query($conn, $sql_post);
+    $result = mysqli_prepare($conn, $sql_post);
+    mysqli_stmt_bind_param($result,'i',$post_id);
+    mysqli_stmt_execute($result);
 
-    if ($post = mysqli_fetch_assoc($result)) {
+    if ($post = mysqli_fetch_assoc(mysqli_stmt_get_result($result))) {
         $title = $post['title'];
         $featured_image = $post['image'];
         $post_slug = $post['slug'];
@@ -162,6 +173,8 @@ function editPost(){
 function updatePost($request_values){
     global $conn, $errors, $post_id, $title, $featured_image, $file_temp, $topic_id, $body, $published, $isEditingPost;
 
+    $isImage = false;
+
     checkFormPost($request_values);
 
     $image = $_FILES['featured_image'];
@@ -169,23 +182,34 @@ function updatePost($request_values){
     if(empty($errors)){
         $slug = createSlug($title);
 
-        $sql_post = "UPDATE `posts` SET `title`='$title', ";
+        $sql_post = "UPDATE `posts` SET `title`= ?, ";
 
         if ($image['name'] != "") {
             $featured_image = $image['name'];
             $file_temp = $image['tmp_name'];
             move_uploaded_file($file_temp, ROOT_PATH."/static/images/".$featured_image);
 
-            $sql_post = $sql_post."`image`='$featured_image', ";
+            $sql_post = $sql_post."`image`= ?, ";
+            $isImage = true;
         }
 
-        $sql_post = $sql_post."`body`='$body' WHERE id=$post_id;";
+        $sql_post = $sql_post."`body`= ? WHERE id= ?;";
 
-        $sql_topic = "UPDATE `post_topic` SET `topic_id`=$topic_id WHERE `post_id`=$post_id;";
+        $sql_topic = "UPDATE `post_topic` SET `topic_id`= ? WHERE `post_id`= ?;";
 
-        if ($result = mysqli_query($conn, $sql_post)) {
-            if ($result = mysqli_query($conn, $sql_topic)) {
-            $_SESSION['message'] = "Article updated succesfully";
+        if ($result = mysqli_prepare($conn, $sql_post)) {
+            if ($isImage){
+                mysqli_stmt_bind_param($result,'sssi',$title,$featured_image,$body,$post_id);
+            } else {
+                mysqli_stmt_bind_param($result,'ssi',$title,$body,$post_id);
+            }
+            mysqli_stmt_execute($result);
+
+            if ($result = mysqli_prepare($conn, $sql_topic)) {
+                mysqli_stmt_bind_param($result,'ii',$topic_id,$post_id);
+                mysqli_stmt_execute($result);
+
+                $_SESSION['message'] = "Article updated succesfully";
             }
         }
 
@@ -200,14 +224,20 @@ function updatePost($request_values){
 // delete blog post
 function deletePost($post_id){
     global $conn;
-    $sql_post = "DELETE FROM posts WHERE id=$post_id";
-    $sql_topic = "DELETE FROM `post_topic` WHERE post_id=$post_id;";
+    $sql_post = "DELETE FROM posts WHERE id=?";
+    $sql_topic = "DELETE FROM `post_topic` WHERE post_id=?;";
 
-    if (mysqli_query($conn, $sql_topic)) {
-        if (mysqli_query($conn, $sql_post)) {
-        $_SESSION['message'] = "Post successfully deleted";
-        header("location: posts.php");
-        exit(0);
+    if ($result = mysqli_prepare($conn, $sql_topic)) {
+        mysqli_stmt_bind_param($result,'i',$post_id);
+        mysqli_stmt_execute($result);
+
+        if ($result = mysqli_prepare($conn, $sql_post)) {
+            mysqli_stmt_bind_param($result,'i',$post_id);
+            mysqli_stmt_execute($result);
+
+            $_SESSION['message'] = "Post successfully deleted";
+            header("location: posts.php");
+            exit(0);
         }
     }
 }
@@ -216,8 +246,10 @@ function deletePost($post_id){
 // toggle blog post : published→unpublished
 function togglePublishPost($post_id, $message){
     global $conn;
-    $sql = "UPDATE posts SET published=!published WHERE id=$post_id";
-    if (mysqli_query($conn, $sql)) {
+    $sql = "UPDATE posts SET published=!published WHERE id=?";
+    if ($result = mysqli_prepare($conn, $sql)) {
+        mysqli_stmt_bind_param($result,'i',$post_id);
+        mysqli_stmt_execute($result);
         $_SESSION['message'] = $message;
         header("location: posts.php");
         exit(0);
@@ -245,11 +277,13 @@ function getUserId(){
 
     $user_name = $_SESSION['user']['username'];
 
-    $sql = "SELECT `id` FROM `users` WHERE `username`='$user_name';";
+    $sql = "SELECT `id` FROM `users` WHERE `username`= ?;";
 
-    $result = mysqli_query($conn, $sql);
+    $result = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($result,'s',$user_name);
+    mysqli_stmt_execute($result);
 
-    $userid = mysqli_fetch_assoc($result);
+    $userid = mysqli_fetch_assoc(mysqli_stmt_get_result($result));
 
     return $userid['id'];
 }
